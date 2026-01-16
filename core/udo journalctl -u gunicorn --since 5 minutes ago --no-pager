@@ -1,0 +1,17 @@
+[0;1;32m●[0m gunicorn.service - Gunicorn Django Application
+     Loaded: loaded (]8;;file://p939282.kvmvps/etc/systemd/system/gunicorn.service/etc/systemd/system/gunicorn.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)
+     Active: [0;1;32mactive (running)[0m since Wed 2026-01-14 15:53:17 UTC; 3s ago
+   Main PID: 30176 (gunicorn)
+      Tasks: 1 (limit: 1068)
+     Memory: 13.6M (peak: 13.8M)
+        CPU: 209ms
+     CGroup: /system.slice/gunicorn.service
+             └─[0;38;5;245m30176 /var/www/game/venv/bin/python3 /var/www/game/venv/bin/gunicorn --workers 3 --bind unix:/run/gunicorn.sock core.wsgi:application[0m
+
+Jan 14 15:53:17 p939282.kvmvps systemd[1]: gunicorn.service: Scheduled restart job, restart counter is at 91.
+Jan 14 15:53:17 p939282.kvmvps systemd[1]: Started gunicorn.service - Gunicorn Django Application.
+Jan 14 15:53:17 p939282.kvmvps gunicorn[30176]: [2026-01-14 15:53:17 +0000] [30176] [INFO] Starting gunicorn 23.0.0
+Jan 14 15:53:17 p939282.kvmvps gunicorn[30176]: [2026-01-14 15:53:17 +0000] [30176] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Jan 14 15:53:18 p939282.kvmvps gunicorn[30176]: [2026-01-14 15:53:18 +0000] [30176] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Jan 14 15:53:19 p939282.kvmvps gunicorn[30176]: [2026-01-14 15:53:19 +0000] [30176] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Jan 14 15:53:20 p939282.kvmvps gunicorn[30176]: [2026-01-14 15:53:20 +0000] [30176] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied

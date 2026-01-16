@@ -4,15 +4,16 @@ from .models import Player, Task
 
 @require_GET
 def game_data_api(request):
-    """
-    Возвращает данные в формате:
-    {
-      "players": [{"name": "...", "position": 1}, ...],
-      "tasks": [{"description": "..."}, ...]
-    }
-    """
-    players = list(Player.objects.values('name', 'position').order_by('position'))
-    tasks = [{"description": t.description} for t in Task.objects.all().order_by('id')]
+    players = list(Player.objects.values('name', 'position'))
+    
+    # Гарантируем 20 заданий
+    tasks = []
+    for i in range(1, 21):
+        try:
+            task = Task.objects.get(id=i)
+            tasks.append({"description": task.description})
+        except Task.DoesNotExist:
+            tasks.append({"description": ""})
     
     return JsonResponse({
         "players": players,
