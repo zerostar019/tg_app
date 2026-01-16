@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
-from .models import Player, Task
+from .models import Player, Task, Rules
 
 @require_GET
 def game_data_api(request):
@@ -16,5 +16,6 @@ def game_data_api(request):
     
     return JsonResponse({
         "players": players,
-        "tasks": tasks
+        "tasks": tasks,
+        "rules": Rules.objects.values_list('text', flat=True).first()
     })

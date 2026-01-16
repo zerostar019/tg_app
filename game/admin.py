@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.contrib import messages
-from .models import Player, Task
+from .models import Player, Task, Rules
+from core.settings import MAX_TASKS_COUNT
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
@@ -44,7 +45,7 @@ class TaskAdmin(admin.ModelAdmin):
         if not obj.id:
             # Находим первый свободный ID от 1 до 20
             existing_ids = set(Task.objects.values_list('id', flat=True))
-            for i in range(1, 21):
+            for i in range(1, MAX_TASKS_COUNT):
                 if i not in existing_ids:
                     obj.id = i
                     break
@@ -60,7 +61,13 @@ class TaskAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         # Создаём недостающие задания
         existing_ids = set(qs.values_list('id', flat=True))
-        for i in range(1, 21):
+        for i in range(1, MAX_TASKS_COUNT):
             if i not in existing_ids:
                 Task.objects.create(id=i, description="")
         return Task.objects.all().order_by('id')
+
+
+@admin.register(Rules)
+class RulesAdmin(admin.ModelAdmin):
+    list_display = ('text',)
+    list_editable = ('text',)
