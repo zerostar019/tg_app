@@ -58,17 +58,6 @@ class Task(models.Model):
         verbose_name_plural = "Задания"
         ordering = ['id']
 
-    def clean(self):
-        """Валидация ID задания"""
-        if not (1 <= self.id <= MAX_TASKS_COUNT):
-            raise ValidationError({
-                'id': f"ID задания должен быть от 1 до {MAX_TASKS_COUNT}"
-            })
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return f"Задание #{self.id}: {self.description[:30]}..." if self.description else f"Задание #{self.id} (пусто)"
 

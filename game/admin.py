@@ -51,7 +51,7 @@ class TaskAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         existing_ids = set(qs.values_list('id', flat=True))
-        for i in range(1, MAX_TASKS_COUNT):
+        for i in range(1, MAX_TASKS_COUNT + 1):
             if i not in existing_ids:
                 Task.objects.create(id=i, description="")
         return Task.objects.all().order_by('id')
