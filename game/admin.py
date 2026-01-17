@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.core.exceptions import ValidationError
-from django.contrib import messages
 from .models import Player, Task, Rules
 from core.settings import MAX_TASKS_COUNT
 
@@ -33,6 +31,9 @@ class TaskAdmin(admin.ModelAdmin):
     
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def has_add_permission(self, request):
+        return Task.objects.count() < MAX_TASKS_COUNT
     
     def save_model(self, request, obj, form, change):
         if not obj.id:
