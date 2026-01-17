@@ -14,12 +14,12 @@ class Player(models.Model):
         verbose_name="Позиция",
         help_text=f"Число от {MIN_PLAYER_POSITION} до {MAX_PLAYER_POSITION}"
     )
-    
+
     class Meta:
         verbose_name = "Игрок"
         verbose_name_plural = "Игроки"
         ordering = ['position']
-    
+
     def clean(self):
         """Валидация данных при сохранении"""
         # Проверка диапазона позиции
@@ -27,22 +27,22 @@ class Player(models.Model):
             raise ValidationError({
                 'position': f"Позиция должна быть от {MIN_PLAYER_POSITION} до {MAX_PLAYER_POSITION}"
             })
-        
-        # Проверка максимального количества игроков
+
+        # Проверка максимального количества игроков (максимум 6)
         existing_count = Player.objects.exclude(pk=self.pk).count()
         if existing_count >= 6:
             raise ValidationError(f"Максимальное количество игроков — {MAX_PLAYER_POSITION}")
-    
+
     def save(self, *args, **kwargs):
         """Автоматический вызов валидации перед сохранением"""
         self.full_clean()
         super().save(*args, **kwargs)
-    
+
     def __str__(self):
         return f"{self.name} (Позиция: {self.position})"
 
+
 class Task(models.Model):
-    """Модель задания (ровно 20 штук)"""
     id = models.PositiveSmallIntegerField(
         primary_key=True,
         verbose_name="ID задания",
@@ -52,38 +52,38 @@ class Task(models.Model):
         blank=True,
         verbose_name="Описание задания"
     )
-    
+
     class Meta:
         verbose_name = "Задание"
         verbose_name_plural = "Задания"
         ordering = ['id']
-    
+
     def clean(self):
         """Валидация ID задания"""
         if not (1 <= self.id <= MAX_TASKS_COUNT):
             raise ValidationError({
                 'id': f"ID задания должен быть от 1 до {MAX_TASKS_COUNT}"
             })
-    
+
     def save(self, *args, **kwargs):
-        """Автоматический вызов валидации"""
         self.full_clean()
         super().save(*args, **kwargs)
-    
+
     def __str__(self):
         return f"Задание #{self.id}: {self.description[:30]}..." if self.description else f"Задание #{self.id} (пусто)"
 
 
 class Rules(models.Model):
+    """Модель правил (только одна запись разрешена)"""
     text = models.TextField(verbose_name='Текст правил')
-    
+
     class Meta:
         verbose_name = "Правила"
         verbose_name_plural = "Правила"
 
     def clean(self):
-        if Rules.objects.exists():
-            raise ValidationError('Уже есть правила')
+        if Rules.objects.exists() and not self.pk:
+            raise ValidationError('Уже есть правила. Разрешена только одна запись.')
 
     def save(self, *args, **kwargs):
         """Автоматический вызов валидации перед сохранением"""

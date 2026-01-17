@@ -1,6 +1,13 @@
 .env
-.idea
-__pycache__
-venv
 *.sqlite3
-staticfiles
+staticfiles/
+.env
+.env.local
+.env.*
+.vscode/
+.idea/
+logs/
+*.log
+db.sqlite3
+.DS_Store
+Thumbs.db
